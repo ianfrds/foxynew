@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { Routes, Route, useLocation } from 'react-router-dom'
+import Lenis from 'lenis'
 import HomePage from './pages/HomePage'
 import ProductDetail from './components/ProductDetail'
 import LoadingScreen from './components/LoadingScreen'
@@ -11,6 +12,24 @@ export default function App() {
   const [transitioning, setTransitioning] = useState(false)
   const location = useLocation()
   const prevPath = useRef(location.pathname)
+
+  useEffect(() => {
+    const lenis = new Lenis({
+      lerp: 0.06,
+      duration: 1.8,
+      wheelMultiplier: 0.8,
+      smoothWheel: true,
+      orientation: 'vertical',
+    })
+
+    function raf(time) {
+      lenis.raf(time)
+      requestAnimationFrame(raf)
+    }
+    requestAnimationFrame(raf)
+
+    return () => lenis.destroy()
+  }, [])
 
   useEffect(() => {
     const timer = setTimeout(() => setFirstLoad(false), 1400)
