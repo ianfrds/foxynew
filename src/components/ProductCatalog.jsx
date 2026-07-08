@@ -34,7 +34,7 @@ export default function ProductCatalog() {
                   alt={product.name}
                   className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                 />
-                <span className="absolute top-1.5 sm:top-2 left-1.5 sm:left-2 bg-white/90 text-[10px] sm:text-xs font-semibold text-gray-700 px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-input">
+                <span className="absolute top-1.5 sm:top-2 left-1.5 sm:left-2 bg-white/90 text-xs font-semibold text-gray-700 px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-input">
                   {product.category}
                 </span>
               </div>

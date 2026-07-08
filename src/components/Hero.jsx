@@ -1,6 +1,5 @@
 import InteractiveDots from './InteractiveDots'
 import { FlipWords } from './ui/flip-words'
-import { LogoLoop } from './ui/LogoLoop/LogoLoop'
 
 // Elegant spinning text path badge replacement using pure CSS/HTML
 const RotatingBadge = () => {
@@ -26,7 +25,7 @@ export default function Hero() {
   const words = ['rooms', 'walls', 'space', 'studio', 'gallery']
 
   return (
-    <section id="hero" className="relative min-h-screen pt-12 pb-12 bg-brand-cream overflow-hidden flex flex-col justify-between">
+    <section id="hero" className="relative min-h-screen pt-16 pb-12 bg-brand-cream overflow-hidden flex flex-col justify-between">
       {/* Interactive dot grid */}
       <InteractiveDots />
 
@@ -156,24 +155,6 @@ export default function Hero() {
             </div>
           </div>
 
-        </div>
-
-        {/* Marketplace Logo Scroller */}
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full mt-8 md:mt-12 border-t border-brand-dark/5 pt-6 md:pt-8 overflow-hidden">
-          <div className="grayscale opacity-40">
-            <LogoLoop
-              logos={[
-                { src: 'https://upload.wikimedia.org/wikipedia/commons/f/fe/Shopee.svg', alt: 'Shopee' },
-                { src: 'https://upload.wikimedia.org/wikipedia/commons/a/a7/Tokopedia.svg', alt: 'Tokopedia' },
-                { src: 'https://jagoketik.com/wp-content/uploads/2023/02/tiktok_shop-logo_brandlogos.net_5ewfz-edited.webp', alt: 'TikTok Shop' },
-              ]}
-              speed={50}
-              direction="left"
-              logoHeight={40}
-              gap={80}
-              pauseOnHover
-            />
-          </div>
         </div>
 
       </div>

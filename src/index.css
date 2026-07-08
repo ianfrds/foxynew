@@ -7,7 +7,7 @@ html {
 }
 
 body {
-  @apply font-sans antialiased text-gray-900 bg-white;
+  @apply font-sans antialiased text-gray-900 bg-white cursor-none;
 }
 
 @layer utilities {
@@ -64,7 +64,6 @@ body {
     0px 3px 6px rgba(0,0,0,0.02),
     0px 2px 7px rgba(0,0,0,0.04),
     0 0 0 1px rgba(0,0,0,0.08);
-  padding: 56px 24px 24px;
   border-radius: 12px;
   cursor: pointer;
   position: relative;
@@ -347,4 +346,9 @@ body {
   );
   background-size: 300% 300%;
   animation: gradientShift 8s ease infinite;
+}
+
+/* ─── Logo Scroller ─── */
+.logo-scroller .logoloop__item img {
+  filter: grayscale(100%);
 }

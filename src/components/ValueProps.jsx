@@ -15,12 +15,12 @@ export default function ValueProps() {
 
         <div className="grid md:grid-cols-3 gap-8">
           {VALUE_PROPS.map((vp) => (
-            <div key={vp.title} className="card group">
+            <div key={vp.title} className="card group pt-12 sm:pt-14 p-5 sm:p-6 md:p-8">
               <span className="icon">
                 <span className="text-2xl leading-none">{vp.icon}</span>
               </span>
-              <h4>{vp.title}</h4>
-              <p>{vp.desc}</p>
+              <h4 className="text-lg md:text-xl">{vp.title}</h4>
+              <p className="text-sm md:text-base">{vp.desc}</p>
 
               <div className="shine" />
               <div className="background">

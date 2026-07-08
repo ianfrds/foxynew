@@ -3,6 +3,7 @@ import { Link, useLocation } from 'react-router-dom'
 import { HiOutlineShoppingCart } from 'react-icons/hi'
 import { NAV_LINKS } from '../constants'
 import useCartStore from '../store/cartStore'
+import logo from '../assets/2.png'
 
 export default function Navbar({ onCartOpen }) {
   const [mobileOpen, setMobileOpen] = useState(false)
@@ -47,9 +48,7 @@ export default function Navbar({ onCartOpen }) {
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-md px-6 md:px-12 lg:px-24 xl:px-40 py-4 flex items-center justify-between">
       <Link to="/" onClick={handleLogoClick} className="flex items-center gap-2.5">
-        <span className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center text-white font-extrabold text-sm">
-          F
-        </span>
+        <img src={logo} alt="Foxy ID" className="h-8 w-auto" />
         <span className="font-bold text-xl text-zinc-900">Foxy ID</span>
       </Link>
 
@@ -72,7 +71,7 @@ export default function Navbar({ onCartOpen }) {
       <div className="hidden md:flex items-center gap-3">
         <button
           onClick={onCartOpen}
-          className="relative p-2 flex items-center justify-center text-zinc-700 hover:text-zinc-500 transition-colors"
+          className="relative p-2.5 flex items-center justify-center text-zinc-700 hover:text-zinc-500 transition-colors"
           aria-label="Buka Keranjang Belanja"
         >
           <HiOutlineShoppingCart className="w-5 h-5" />
@@ -98,7 +97,7 @@ export default function Navbar({ onCartOpen }) {
       <div className="md:hidden flex items-center gap-2">
         <button
           onClick={onCartOpen}
-          className="relative p-2 flex items-center justify-center text-zinc-700"
+          className="relative p-3 flex items-center justify-center text-zinc-700"
           aria-label="Buka Keranjang Belanja"
         >
           <HiOutlineShoppingCart className="w-5 h-5" />
@@ -110,7 +109,7 @@ export default function Navbar({ onCartOpen }) {
         </button>
         <button
           onClick={() => setMobileOpen(!mobileOpen)}
-          className="flex flex-col gap-1.5 cursor-pointer bg-transparent border-0 p-1"
+          className="flex flex-col gap-1.5 cursor-pointer bg-transparent border-0 p-2.5"
           aria-label={mobileOpen ? 'Tutup Menu' : 'Buka Menu'}
         >
           <span className={`block w-6 h-0.5 bg-zinc-800 transition-transform ${mobileOpen ? 'rotate-45 translate-y-2' : ''}`} />
@@ -124,7 +123,7 @@ export default function Navbar({ onCartOpen }) {
           <button
             key={link.id}
             onClick={() => scrollTo(link.id)}
-            className={`block px-4 py-2.5 rounded-lg text-sm w-full text-left ${
+            className={`block px-4 py-3.5 rounded-lg text-sm w-full text-left ${
               activeSection === link.id
                 ? 'bg-zinc-100 font-medium text-zinc-800'
                 : 'text-zinc-500 hover:bg-zinc-50'
@@ -135,7 +134,7 @@ export default function Navbar({ onCartOpen }) {
         ))}
         <button
           onClick={() => scrollTo('produk')}
-          className="flex items-center justify-center gap-2.5 bg-gradient-to-r from-zinc-950 to-zinc-500 text-zinc-50 text-sm font-medium px-5 py-2.5 rounded-full cursor-pointer border-0 mt-3 w-fit"
+          className="flex items-center justify-center gap-2.5 bg-gradient-to-r from-zinc-950 to-zinc-500 text-zinc-50 text-sm font-medium px-5 py-3.5 rounded-full cursor-pointer border-0 mt-3 w-fit"
         >
           Mulai Cetak
           <span className="w-7 h-7 rounded-full bg-white flex items-center justify-center">

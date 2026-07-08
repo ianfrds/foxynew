@@ -28,7 +28,7 @@ function AnimatedLine({ text, progress, className = '' }) {
     <div className={`relative inline-block ${className}`}>
       <span className="text-zinc-300/50">{text}</span>
       <motion.span
-        className="absolute inset-0 text-brand-dark whitespace-nowrap"
+        className="absolute inset-0 text-brand-dark"
         style={{ clipPath: clip }}
       >
         {text}
@@ -82,17 +82,17 @@ export default function AestheticSection() {
           <AnimatedLine
             text="Your Room,"
             progress={line1Progress}
-            className="text-5xl sm:text-7xl lg:text-8xl xl:text-9xl font-black tracking-tighter block"
+            className="text-4xl sm:text-7xl lg:text-8xl xl:text-9xl font-black tracking-tighter block"
           />
           <AnimatedLine
             text="Your Rules,"
             progress={line2Progress}
-            className="text-5xl sm:text-7xl lg:text-8xl xl:text-9xl font-black tracking-tighter block mt-2 sm:mt-4"
+            className="text-4xl sm:text-7xl lg:text-8xl xl:text-9xl font-black tracking-tighter block mt-2 sm:mt-4"
           />
           <AnimatedLine
             text="Your Aesthetic."
             progress={line3Progress}
-            className="text-5xl sm:text-7xl lg:text-8xl xl:text-9xl font-black tracking-tighter block mt-2 sm:mt-4"
+            className="text-4xl sm:text-7xl lg:text-8xl xl:text-9xl font-black tracking-tighter block mt-2 sm:mt-4"
           />
         </div>
       </div>

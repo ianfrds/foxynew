@@ -3,6 +3,8 @@ import { Routes, Route, useLocation } from 'react-router-dom'
 import HomePage from './pages/HomePage'
 import ProductDetail from './components/ProductDetail'
 import LoadingScreen from './components/LoadingScreen'
+import GradualBlur from './components/ui/GradualBlur/GradualBlur'
+import SmoothFollower from './components/SmoothFollower'
 
 export default function App() {
   const [firstLoad, setFirstLoad] = useState(true)
@@ -35,6 +37,19 @@ export default function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/product/:productId" element={<ProductDetail />} />
       </Routes>
+
+      <GradualBlur
+        target="page"
+        position="bottom"
+        height="7rem"
+        strength={2}
+        divCount={5}
+        curve="bezier"
+        exponential
+        opacity={1}
+      />
+
+      <SmoothFollower />
     </>
   )
 }

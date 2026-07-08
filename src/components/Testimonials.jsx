@@ -25,7 +25,7 @@ export default function Testimonials() {
               {duplicated.map((t, i) => (
                 <div
                   key={i}
-                  className="min-w-[80%] sm:min-w-[45%] md:min-w-[calc(50%-12px)] lg:min-w-[calc(33.333%-16px)] bg-white rounded-2xl p-5 md:p-6 border border-gray-100 shrink-0 shadow-sm hover:shadow-md transition-shadow duration-300"
+                  className="min-w-[80%] sm:min-w-[45%] md:min-w-[calc(50%-12px)] lg:min-w-[calc(33.333%-16px)] bg-white rounded-xl p-5 md:p-6 border border-gray-100 shrink-0 shadow-sm hover:shadow-md transition-shadow duration-300"
                 >
                   <div className="flex items-center gap-3 mb-3">
                     <img

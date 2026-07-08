@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import Navbar from '../components/Navbar'
 import Hero from '../components/Hero'
+import LogoScroller from '../components/LogoScroller'
 import AestheticSection from '../components/AestheticSection'
 import ProductCatalog from '../components/ProductCatalog'
 import Workflow from '../components/Workflow'
@@ -19,6 +20,7 @@ export default function HomePage() {
       <Navbar onCartOpen={openCart} />
       <Hero />
       <Statistics />
+      <LogoScroller />
       <ProductCatalog />
       <Workflow />
       <ValueProps />

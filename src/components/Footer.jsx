@@ -1,4 +1,5 @@
 import { FaInstagram, FaXTwitter, FaTiktok, FaYoutube, FaWhatsapp } from 'react-icons/fa6'
+import logo from '../assets/2.png'
 
 const socialLinks = [
   { icon: FaXTwitter, label: 'Twitter', href: '#' },
@@ -15,9 +16,7 @@ export default function Footer() {
 
         <div className="lg:col-span-3 space-y-6">
           <a href="/" className="flex items-center gap-2.5">
-            <span className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center text-white font-extrabold text-sm">
-              F
-            </span>
+            <img src={logo} alt="Foxy ID" className="h-8 w-auto" />
             <span className="font-bold text-xl text-white">Foxy ID</span>
           </a>
           <p className="text-sm/6 text-neutral-300 max-w-96 sm:max-w-72">
@@ -37,7 +36,7 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="lg:col-span-3 grid grid-cols-2 md:grid-cols-3 gap-8 md:gap-12 lg:gap-20 items-start">
+        <div className="lg:col-span-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 md:gap-12 lg:gap-20 items-start">
           <div>
             <h3 className="font-medium text-sm mb-4">Produk</h3>
             <ul className="space-y-3 text-sm text-neutral-300">
@@ -57,7 +56,7 @@ export default function Footer() {
             </ul>
           </div>
 
-          <div className="col-span-2 md:col-span-1">
+          <div className="sm:col-span-2 md:col-span-1">
             <h3 className="font-medium text-sm mb-4">Perusahaan</h3>
             <ul className="space-y-3 text-sm text-neutral-300">
               <li><a href="#" className="hover:text-neutral-400 transition-colors">Tentang Kami</a></li>
