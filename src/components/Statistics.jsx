@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { HiStar } from 'react-icons/hi'
+import Reveal from './Reveal'
 
 function useCountUp(end, duration = 2000, trigger) {
   const [count, setCount] = useState(0)
@@ -61,44 +62,52 @@ export default function Statistics() {
   return (
     <section ref={ref} className="py-16 md:py-20 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-gray-900">
-            Kepercayaan Pelanggan
-          </h2>
-          <p className="mt-4 text-lg text-gray-600 max-w-2xl mx-auto">
-            Sudah dipercaya ribuan pelanggan dari seluruh Indonesia.
-          </p>
-        </div>
+          <Reveal>
+            <div className="text-center mb-12">
+              <h2 className="text-3xl sm:text-4xl font-extrabold text-gray-900">
+                Kepercayaan Pelanggan
+              </h2>
+              <p className="mt-4 text-lg text-gray-600 max-w-2xl mx-auto">
+                Sudah dipercaya ribuan pelanggan dari seluruh Indonesia.
+              </p>
+            </div>
+          </Reveal>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
-          <div className="bg-bg-light rounded-2xl p-8 text-center border border-gray-100 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
-            <div className="text-4xl font-black text-primary tabular-nums">
-              {visible ? productsSold.toLocaleString('id-ID') : '0'}
-              <span className="text-2xl">+</span>
+          <Reveal delay={0}>
+            <div className="bg-bg-light rounded-2xl p-8 text-center border border-gray-100 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+              <div className="text-4xl font-black text-primary tabular-nums">
+                {visible ? productsSold.toLocaleString('id-ID') : '0'}
+                <span className="text-2xl">+</span>
+              </div>
+              <p className="text-gray-500 text-sm mt-2 font-medium uppercase tracking-wider">
+                Produk Terjual
+              </p>
             </div>
-            <p className="text-gray-500 text-sm mt-2 font-medium uppercase tracking-wider">
-              Produk Terjual
-            </p>
-          </div>
+          </Reveal>
 
-          <div className="bg-bg-light rounded-2xl p-8 text-center border border-gray-100 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
-            <div className="text-4xl font-black text-primary tabular-nums">
-              Sejak {visible ? sinceYear : '—'}
+          <Reveal delay={0.1}>
+            <div className="bg-bg-light rounded-2xl p-8 text-center border border-gray-100 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+              <div className="text-4xl font-black text-primary tabular-nums">
+                Sejak {visible ? sinceYear : '—'}
+              </div>
+              <p className="text-gray-500 text-sm mt-2 font-medium uppercase tracking-wider">
+                Tahun Berdiri
+              </p>
             </div>
-            <p className="text-gray-500 text-sm mt-2 font-medium uppercase tracking-wider">
-              Tahun Berdiri
-            </p>
-          </div>
+          </Reveal>
 
-          <div className="bg-bg-light rounded-2xl p-8 text-center border border-gray-100 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
-            <div className="flex items-center justify-center gap-2 mb-1">
-              <span className="text-4xl font-black text-primary tabular-nums">4.9</span>
-              <StarRating rating={5} size="w-5 h-5" />
+          <Reveal delay={0.2}>
+            <div className="bg-bg-light rounded-2xl p-8 text-center border border-gray-100 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+              <div className="flex items-center justify-center gap-2 mb-1">
+                <span className="text-4xl font-black text-primary tabular-nums">4.9</span>
+                <StarRating rating={5} size="w-5 h-5" />
+              </div>
+              <p className="text-gray-500 text-sm mt-2 font-medium uppercase tracking-wider">
+                Rating {visible ? `(${totalReviews.toLocaleString('id-ID')} ulasan)` : ''}
+              </p>
             </div>
-            <p className="text-gray-500 text-sm mt-2 font-medium uppercase tracking-wider">
-              Rating {visible ? `(${totalReviews.toLocaleString('id-ID')} ulasan)` : ''}
-            </p>
-          </div>
+          </Reveal>
         </div>
       </div>
     </section>
