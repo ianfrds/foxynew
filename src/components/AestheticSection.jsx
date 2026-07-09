@@ -1,6 +1,5 @@
 import { useRef, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { useLenis } from '../lib/LenisContext'
 
 function Sparkle({ x, y, size, delay, duration }) {
   return (
@@ -43,47 +42,40 @@ const rows = [0, 1, 2]
 
 export default function AestheticSection() {
   const containerRef = useRef(null)
-  const lenis = useLenis()
   const wordRefs = useRef([])
   const fadeRef = useRef(null)
   const rafId = useRef(null)
 
   useEffect(() => {
-    if (!lenis) return
     wordRefs.current = wordRefs.current.slice(0, wordData.length)
 
-    const onScroll = () => {
-      if (rafId.current !== null) return
-      rafId.current = requestAnimationFrame(() => {
-        rafId.current = null
-        const el = containerRef.current
+    const tick = () => {
+      const el = containerRef.current
+      if (!el) return
+      const rect = el.getBoundingClientRect()
+      const total = rect.height - window.innerHeight
+      const scrolled = -rect.top
+      const p = total > 0 ? Math.max(0, Math.min(1, scrolled / total)) : 0
+
+      const fade = Math.max(0, Math.min(1, (p - 0.85) / 0.15))
+      if (fadeRef.current) fadeRef.current.style.opacity = fade
+
+      wordData.forEach((word, i) => {
+        const el = wordRefs.current[i]
         if (!el) return
-        const rect = el.getBoundingClientRect()
-        const total = rect.height - window.innerHeight
-        const scrolled = -rect.top
-        const p = total > 0 ? Math.max(0, Math.min(1, scrolled / total)) : 0
-
-        const fade = Math.max(0, Math.min(1, (p - 0.85) / 0.15))
-        if (fadeRef.current) fadeRef.current.style.opacity = fade
-
-        wordData.forEach((word, i) => {
-          const el = wordRefs.current[i]
-          if (!el) return
-          const w = Math.max(0, Math.min(1, (p - word.start) / (word.end - word.start)))
-          el.style.opacity = w
-          el.style.filter = `blur(${(1 - w) * 8}px)`
-          el.style.transform = `translateY(${(1 - w) * 12}px)`
-          el.style.clipPath = `inset(0 ${(1 - w) * 100}% 0 0)`
-        })
+        const w = Math.max(0, Math.min(1, (p - word.start) / (word.end - word.start)))
+        el.style.opacity = w
+        el.style.filter = `blur(${(1 - w) * 8}px)`
+        el.style.transform = `translateY(${(1 - w) * 12}px)`
+        el.style.clipPath = `inset(0 ${(1 - w) * 100}% 0 0)`
       })
+
+      rafId.current = requestAnimationFrame(tick)
     }
 
-    lenis.on('scroll', onScroll)
-    return () => {
-      lenis.off('scroll', onScroll)
-      if (rafId.current !== null) cancelAnimationFrame(rafId.current)
-    }
-  }, [lenis])
+    rafId.current = requestAnimationFrame(tick)
+    return () => cancelAnimationFrame(rafId.current)
+  }, [])
 
   let wordIdx = 0
 

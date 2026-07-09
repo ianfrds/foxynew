@@ -1,13 +1,11 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { Routes, Route, useLocation } from 'react-router-dom'
-import Lenis from 'lenis'
 import { HiArrowUp } from 'react-icons/hi'
 import HomePage from './pages/HomePage'
 import ProductDetail from './components/ProductDetail'
 import LoadingScreen from './components/LoadingScreen'
 import GradualBlur from './components/ui/GradualBlur/GradualBlur'
 import SmoothFollower from './components/SmoothFollower'
-import { LenisCtx } from './lib/LenisContext'
 
 export default function App() {
   const [firstLoad, setFirstLoad] = useState(true)
@@ -15,34 +13,21 @@ export default function App() {
   const [atBottom, setAtBottom] = useState(false)
   const location = useLocation()
   const prevPath = useRef(location.pathname)
-  const lenisRef = useRef(null)
 
   useEffect(() => {
-    const lenis = new Lenis({
-      lerp: 0.06,
-      duration: 1.8,
-      wheelMultiplier: 0.8,
-      smoothWheel: true,
-      orientation: 'vertical',
-    })
-
-    lenisRef.current = lenis
-
-    lenis.on('scroll', ({ progress }) => {
+    const onScroll = () => {
+      const scrollTop = window.scrollY
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight
+      const progress = docHeight > 0 ? scrollTop / docHeight : 0
       setAtBottom(progress >= 0.95)
-    })
-
-    function raf(time) {
-      lenis.raf(time)
-      requestAnimationFrame(raf)
     }
-    requestAnimationFrame(raf)
-
-    return () => lenis.destroy()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    onScroll()
+    return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
   const scrollToTop = useCallback(() => {
-    lenisRef.current?.scrollTo(0, { immediate: false })
+    window.scrollTo({ top: 0, behavior: 'smooth' })
   }, [])
 
   useEffect(() => {
@@ -64,7 +49,7 @@ export default function App() {
   if (firstLoad) return <LoadingScreen />
 
   return (
-    <LenisCtx.Provider value={lenisRef.current}>
+    <>
       {transitioning && <LoadingScreen overlay />}
       <Routes>
         <Route path="/" element={<HomePage />} />
@@ -89,6 +74,6 @@ export default function App() {
       </button>
 
       <SmoothFollower />
-    </LenisCtx.Provider>
+    </>
   )
 }

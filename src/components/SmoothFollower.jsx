@@ -48,8 +48,8 @@ export default function SmoothFollower() {
       el.addEventListener('mouseleave', leave)
     })
 
-    const DOT_SMOOTHNESS = 0.2
-    const RING_SMOOTHNESS = 0.1
+    const DOT_SMOOTHNESS = 0.7
+    const RING_SMOOTHNESS = 0.5
 
     const tick = () => {
       dot.current.x += (mousePos.current.x - dot.current.x) * DOT_SMOOTHNESS
