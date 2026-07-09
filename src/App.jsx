@@ -7,6 +7,7 @@ import ProductDetail from './components/ProductDetail'
 import LoadingScreen from './components/LoadingScreen'
 import GradualBlur from './components/ui/GradualBlur/GradualBlur'
 import SmoothFollower from './components/SmoothFollower'
+import { LenisCtx } from './lib/LenisContext'
 
 export default function App() {
   const [firstLoad, setFirstLoad] = useState(true)
@@ -63,7 +64,7 @@ export default function App() {
   if (firstLoad) return <LoadingScreen />
 
   return (
-    <>
+    <LenisCtx.Provider value={lenisRef.current}>
       {transitioning && <LoadingScreen overlay />}
       <Routes>
         <Route path="/" element={<HomePage />} />
@@ -74,10 +75,6 @@ export default function App() {
         target="page"
         position="bottom"
         height="7rem"
-        strength={1}
-        divCount={3}
-        curve="bezier"
-        exponential
         opacity={atBottom ? 0 : 1}
       />
 
@@ -92,6 +89,6 @@ export default function App() {
       </button>
 
       <SmoothFollower />
-    </>
+    </LenisCtx.Provider>
   )
 }

@@ -11,6 +11,7 @@ export default function InteractiveDots() {
     let animationId = null
     let mouse = { x: -9999, y: -9999 }
     let dots = []
+    let isVisible = true
 
     const SPACING = 24
     const DOT_RADIUS = 1.5
@@ -20,6 +21,14 @@ export default function InteractiveDots() {
     const LERP_MOUSE = 0.3
 
     let smoothMouse = { x: -9999, y: -9999 }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        isVisible = entry.isIntersecting
+      },
+      { threshold: 0 }
+    )
+    observer.observe(canvas)
 
     function resize() {
       const rect = canvas.parentElement.getBoundingClientRect()
@@ -47,6 +56,9 @@ export default function InteractiveDots() {
     }
 
     function draw() {
+      animationId = requestAnimationFrame(draw)
+      if (!isVisible) return
+
       ctx.clearRect(0, 0, canvas.width, canvas.height)
 
       smoothMouse.x += (mouse.x - smoothMouse.x) * LERP_MOUSE
@@ -75,8 +87,6 @@ export default function InteractiveDots() {
         ctx.globalAlpha = 0.15
         ctx.fill()
       }
-
-      animationId = requestAnimationFrame(draw)
     }
 
     const parent = canvas.parentElement
@@ -118,6 +128,7 @@ export default function InteractiveDots() {
 
     return () => {
       cancelAnimationFrame(animationId)
+      observer.disconnect()
       window.removeEventListener('resize', onResize)
       parent.removeEventListener('mousemove', onMouseMove)
       parent.removeEventListener('mouseleave', onMouseLeave)

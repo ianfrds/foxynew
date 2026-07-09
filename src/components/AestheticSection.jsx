@@ -1,5 +1,6 @@
-import { useRef } from 'react'
-import { motion, useScroll, useTransform } from 'framer-motion'
+import { useRef, useEffect } from 'react'
+import { motion } from 'framer-motion'
+import { useLenis } from '../lib/LenisContext'
 
 function Sparkle({ x, y, size, delay, duration }) {
   return (
@@ -21,23 +22,7 @@ function Sparkle({ x, y, size, delay, duration }) {
   )
 }
 
-function AnimatedLine({ text, progress, className = '' }) {
-  const clip = useTransform(progress, [0, 1], ['inset(0 100% 0 0)', 'inset(0 0% 0 0)'])
-
-  return (
-    <div className={`relative inline-block ${className}`}>
-      <span className="text-zinc-300/50">{text}</span>
-      <motion.span
-        className="absolute inset-0 text-brand-dark"
-        style={{ clipPath: clip }}
-      >
-        {text}
-      </motion.span>
-    </div>
-  )
-}
-
-const sparkles = Array.from({ length: 20 }, () => ({
+const sparkles = Array.from({ length: 10 }, () => ({
   x: Math.random() * 100,
   y: Math.random() * 100,
   size: 2 + Math.random() * 6,
@@ -47,53 +32,87 @@ const sparkles = Array.from({ length: 20 }, () => ({
 
 export default function AestheticSection() {
   const containerRef = useRef(null)
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ['start end', 'end start'],
-  })
+  const lenis = useLenis()
+  const line1Ref = useRef(null)
+  const line2Ref = useRef(null)
+  const line3Ref = useRef(null)
+  const fadeRef = useRef(null)
+  const progressRef = useRef(0)
+  const rafId = useRef(null)
 
-  const line1Progress = useTransform(scrollYProgress, [0, 0.32], [0, 1])
-  const line2Progress = useTransform(scrollYProgress, [0.28, 0.58], [0, 1])
-  const line3Progress = useTransform(scrollYProgress, [0.52, 0.82], [0, 1])
-  const bgOpacity = useTransform(scrollYProgress, [0.85, 1], [0, 1])
+  useEffect(() => {
+    if (!lenis) return
+
+    const onScroll = () => {
+      if (rafId.current !== null) return
+      rafId.current = requestAnimationFrame(() => {
+        rafId.current = null
+        const el = containerRef.current
+        if (!el) return
+        const rect = el.getBoundingClientRect()
+        const total = rect.height - window.innerHeight
+        const scrolled = -rect.top
+        const p = total > 0 ? Math.max(0, Math.min(1, scrolled / total)) : 0
+        progressRef.current = p
+
+        const l1 = Math.max(0, Math.min(1, (p - 0) / 0.32))
+        const l2 = Math.max(0, Math.min(1, (p - 0.28) / 0.3))
+        const l3 = Math.max(0, Math.min(1, (p - 0.52) / 0.3))
+        const fade = Math.max(0, Math.min(1, (p - 0.85) / 0.15))
+
+        if (line1Ref.current) line1Ref.current.style.clipPath = `inset(0 ${(1 - l1) * 100}% 0 0)`
+        if (line2Ref.current) line2Ref.current.style.clipPath = `inset(0 ${(1 - l2) * 100}% 0 0)`
+        if (line3Ref.current) line3Ref.current.style.clipPath = `inset(0 ${(1 - l3) * 100}% 0 0)`
+        if (fadeRef.current) fadeRef.current.style.opacity = fade
+      })
+    }
+
+    lenis.on('scroll', onScroll)
+    return () => {
+      lenis.off('scroll', onScroll)
+      if (rafId.current !== null) cancelAnimationFrame(rafId.current)
+    }
+  }, [lenis])
 
   return (
     <div ref={containerRef} className="relative h-[300vh]">
       <div className="sticky top-0 h-screen flex items-center justify-center overflow-hidden bg-brand-cream">
-        {/* Animated gradient background */}
         <div className="absolute inset-0 bg-gradient-animated pointer-events-none" />
 
-        {/* Sparkles */}
         {sparkles.map((s, i) => (
           <Sparkle key={i} {...s} />
         ))}
 
-        {/* Bottom fade to next section */}
-        <motion.div
+        <div
+          ref={fadeRef}
           className="absolute inset-x-0 bottom-0 h-48 pointer-events-none z-10"
           style={{
             background: 'linear-gradient(to top, #FAF7F2, transparent)',
-            opacity: bgOpacity,
+            opacity: 0,
           }}
         />
 
-        {/* Main text */}
         <div className="relative z-10 px-6 text-center leading-[1.15]">
-          <AnimatedLine
-            text="Your Room,"
-            progress={line1Progress}
-            className="text-4xl sm:text-7xl lg:text-8xl xl:text-9xl font-black tracking-tighter block"
-          />
-          <AnimatedLine
-            text="Your Rules,"
-            progress={line2Progress}
-            className="text-4xl sm:text-7xl lg:text-8xl xl:text-9xl font-black tracking-tighter block mt-2 sm:mt-4"
-          />
-          <AnimatedLine
-            text="Your Aesthetic."
-            progress={line3Progress}
-            className="text-4xl sm:text-7xl lg:text-8xl xl:text-9xl font-black tracking-tighter block mt-2 sm:mt-4"
-          />
+          <div className="relative inline-block text-4xl sm:text-7xl lg:text-8xl xl:text-9xl font-black tracking-tighter block">
+            <span className="text-zinc-300/50">Your Room,</span>
+            <span ref={line1Ref} className="absolute inset-0 text-brand-dark" style={{ clipPath: 'inset(0 100% 0 0)' }}>
+              Your Room,
+            </span>
+          </div>
+
+          <div className="relative inline-block text-4xl sm:text-7xl lg:text-8xl xl:text-9xl font-black tracking-tighter block mt-2 sm:mt-4">
+            <span className="text-zinc-300/50">Your Rules,</span>
+            <span ref={line2Ref} className="absolute inset-0 text-brand-dark" style={{ clipPath: 'inset(0 100% 0 0)' }}>
+              Your Rules,
+            </span>
+          </div>
+
+          <div className="relative inline-block text-4xl sm:text-7xl lg:text-8xl xl:text-9xl font-black tracking-tighter block mt-2 sm:mt-4">
+            <span className="text-zinc-300/50">Your Aesthetic.</span>
+            <span ref={line3Ref} className="absolute inset-0 text-brand-dark" style={{ clipPath: 'inset(0 100% 0 0)' }}>
+              Your Aesthetic.
+            </span>
+          </div>
         </div>
       </div>
     </div>
