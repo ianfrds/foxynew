@@ -30,18 +30,27 @@ const sparkles = Array.from({ length: 10 }, () => ({
   duration: 2 + Math.random() * 4,
 }))
 
+const wordData = [
+  { text: 'Your\u00A0', row: 0, start: 0, end: 0.14 },
+  { text: 'Room,\u00A0', row: 0, start: 0.14, end: 0.28 },
+  { text: 'Your\u00A0', row: 1, start: 0.28, end: 0.42 },
+  { text: 'Rules,\u00A0', row: 1, start: 0.42, end: 0.56 },
+  { text: 'Your\u00A0', row: 2, start: 0.52, end: 0.67 },
+  { text: 'Aesthetic.', row: 2, start: 0.67, end: 0.82 },
+]
+
+const rows = [0, 1, 2]
+
 export default function AestheticSection() {
   const containerRef = useRef(null)
   const lenis = useLenis()
-  const line1Ref = useRef(null)
-  const line2Ref = useRef(null)
-  const line3Ref = useRef(null)
+  const wordRefs = useRef([])
   const fadeRef = useRef(null)
-  const progressRef = useRef(0)
   const rafId = useRef(null)
 
   useEffect(() => {
     if (!lenis) return
+    wordRefs.current = wordRefs.current.slice(0, wordData.length)
 
     const onScroll = () => {
       if (rafId.current !== null) return
@@ -53,17 +62,19 @@ export default function AestheticSection() {
         const total = rect.height - window.innerHeight
         const scrolled = -rect.top
         const p = total > 0 ? Math.max(0, Math.min(1, scrolled / total)) : 0
-        progressRef.current = p
 
-        const l1 = Math.max(0, Math.min(1, (p - 0) / 0.32))
-        const l2 = Math.max(0, Math.min(1, (p - 0.28) / 0.3))
-        const l3 = Math.max(0, Math.min(1, (p - 0.52) / 0.3))
         const fade = Math.max(0, Math.min(1, (p - 0.85) / 0.15))
-
-        if (line1Ref.current) line1Ref.current.style.clipPath = `inset(0 ${(1 - l1) * 100}% 0 0)`
-        if (line2Ref.current) line2Ref.current.style.clipPath = `inset(0 ${(1 - l2) * 100}% 0 0)`
-        if (line3Ref.current) line3Ref.current.style.clipPath = `inset(0 ${(1 - l3) * 100}% 0 0)`
         if (fadeRef.current) fadeRef.current.style.opacity = fade
+
+        wordData.forEach((word, i) => {
+          const el = wordRefs.current[i]
+          if (!el) return
+          const w = Math.max(0, Math.min(1, (p - word.start) / (word.end - word.start)))
+          el.style.opacity = w
+          el.style.filter = `blur(${(1 - w) * 8}px)`
+          el.style.transform = `translateY(${(1 - w) * 12}px)`
+          el.style.clipPath = `inset(0 ${(1 - w) * 100}% 0 0)`
+        })
       })
     }
 
@@ -73,6 +84,8 @@ export default function AestheticSection() {
       if (rafId.current !== null) cancelAnimationFrame(rafId.current)
     }
   }, [lenis])
+
+  let wordIdx = 0
 
   return (
     <div ref={containerRef} className="relative h-[300vh]">
@@ -93,26 +106,35 @@ export default function AestheticSection() {
         />
 
         <div className="relative z-10 px-6 text-center leading-[1.15]">
-          <div className="relative inline-block text-4xl sm:text-7xl lg:text-8xl xl:text-9xl font-black tracking-tighter block">
-            <span className="text-zinc-300/50">Your Room,</span>
-            <span ref={line1Ref} className="absolute inset-0 text-brand-dark" style={{ clipPath: 'inset(0 100% 0 0)' }}>
-              Your Room,
-            </span>
-          </div>
-
-          <div className="relative inline-block text-4xl sm:text-7xl lg:text-8xl xl:text-9xl font-black tracking-tighter block mt-2 sm:mt-4">
-            <span className="text-zinc-300/50">Your Rules,</span>
-            <span ref={line2Ref} className="absolute inset-0 text-brand-dark" style={{ clipPath: 'inset(0 100% 0 0)' }}>
-              Your Rules,
-            </span>
-          </div>
-
-          <div className="relative inline-block text-4xl sm:text-7xl lg:text-8xl xl:text-9xl font-black tracking-tighter block mt-2 sm:mt-4">
-            <span className="text-zinc-300/50">Your Aesthetic.</span>
-            <span ref={line3Ref} className="absolute inset-0 text-brand-dark" style={{ clipPath: 'inset(0 100% 0 0)' }}>
-              Your Aesthetic.
-            </span>
-          </div>
+          {rows.map(row => (
+            <div
+              key={row}
+              className="text-4xl sm:text-7xl lg:text-8xl xl:text-9xl font-black tracking-tighter block mt-2 sm:mt-4 first:mt-0"
+            >
+              {wordData
+                .filter(w => w.row === row)
+                .map(word => {
+                  const idx = wordIdx++
+                  return (
+                    <span key={idx} className="relative inline-block">
+                      <span className="text-zinc-300/50">{word.text}</span>
+                      <span
+                        ref={el => { wordRefs.current[idx] = el }}
+                        className="absolute inset-0 text-brand-dark whitespace-nowrap"
+                        style={{
+                          opacity: 0,
+                          filter: 'blur(8px)',
+                          transform: 'translateY(12px)',
+                          clipPath: 'inset(0 100% 0 0)',
+                        }}
+                      >
+                        {word.text}
+                      </span>
+                    </span>
+                  )
+                })}
+            </div>
+          ))}
         </div>
       </div>
     </div>
