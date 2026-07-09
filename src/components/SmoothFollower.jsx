@@ -84,15 +84,15 @@ export default function SmoothFollower() {
   if (!isDesktop) return null
 
   return (
-    <div className="pointer-events-none fixed inset-0 z-[60]">
+    <div className="pointer-events-none fixed inset-0 z-[60]" style={{ mixBlendMode: 'difference' }}>
       <div
         ref={dotEl}
-        className="absolute rounded-full bg-black"
+        className="absolute rounded-full bg-white"
         style={{ width: 8, height: 8, transform: 'translate(-50%,-50%)' }}
       />
       <div
         ref={ringEl}
-        className="absolute rounded-full border border-black"
+        className="absolute rounded-full border border-white"
         style={{
           width: 28,
           height: 28,

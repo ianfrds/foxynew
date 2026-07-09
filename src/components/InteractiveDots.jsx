@@ -13,10 +13,10 @@ export default function InteractiveDots() {
     let dots = []
     let isVisible = true
 
-    const SPACING = 24
-    const DOT_RADIUS = 1.5
-    const INTERACT_RADIUS = 130
-    const DISPLACE_FORCE = 45
+    const SPACING = 28
+    const DOT_RADIUS = 2.5
+    const INTERACT_RADIUS = 150
+    const DISPLACE_FORCE = 80
     const RETURN_SPEED = 0.04
     const LERP_MOUSE = 0.3
 
@@ -84,7 +84,7 @@ export default function InteractiveDots() {
         ctx.beginPath()
         ctx.arc(d.x, d.y, DOT_RADIUS, 0, Math.PI * 2)
         ctx.fillStyle = '#1A1A1A'
-        ctx.globalAlpha = 0.15
+        ctx.globalAlpha = 0.08
         ctx.fill()
       }
     }
