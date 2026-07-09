@@ -1,6 +1,7 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import { Routes, Route, useLocation } from 'react-router-dom'
 import Lenis from 'lenis'
+import { HiArrowUp } from 'react-icons/hi'
 import HomePage from './pages/HomePage'
 import ProductDetail from './components/ProductDetail'
 import LoadingScreen from './components/LoadingScreen'
@@ -10,8 +11,10 @@ import SmoothFollower from './components/SmoothFollower'
 export default function App() {
   const [firstLoad, setFirstLoad] = useState(true)
   const [transitioning, setTransitioning] = useState(false)
+  const [atBottom, setAtBottom] = useState(false)
   const location = useLocation()
   const prevPath = useRef(location.pathname)
+  const lenisRef = useRef(null)
 
   useEffect(() => {
     const lenis = new Lenis({
@@ -22,6 +25,12 @@ export default function App() {
       orientation: 'vertical',
     })
 
+    lenisRef.current = lenis
+
+    lenis.on('scroll', ({ progress }) => {
+      setAtBottom(progress >= 0.95)
+    })
+
     function raf(time) {
       lenis.raf(time)
       requestAnimationFrame(raf)
@@ -29,6 +38,10 @@ export default function App() {
     requestAnimationFrame(raf)
 
     return () => lenis.destroy()
+  }, [])
+
+  const scrollToTop = useCallback(() => {
+    lenisRef.current?.scrollTo(0, { immediate: false })
   }, [])
 
   useEffect(() => {
@@ -61,12 +74,22 @@ export default function App() {
         target="page"
         position="bottom"
         height="7rem"
-        strength={2}
-        divCount={5}
+        strength={1}
+        divCount={3}
         curve="bezier"
         exponential
-        opacity={1}
+        opacity={atBottom ? 0 : 1}
       />
+
+      <button
+        onClick={scrollToTop}
+        aria-label="Scroll ke atas"
+        className={`fixed bottom-6 right-6 z-50 w-12 h-12 rounded-full bg-primary text-white shadow-lg flex items-center justify-center transition-all duration-300 hover:bg-primary/90 active:scale-95 ${
+          atBottom ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'
+        }`}
+      >
+        <HiArrowUp className="w-5 h-5" />
+      </button>
 
       <SmoothFollower />
     </>

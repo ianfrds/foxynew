@@ -1,109 +1,105 @@
 import { useState, useEffect, useRef } from 'react';
 
 export default function SmoothFollower() {
-  const mousePosition = useRef({ x: 0, y: 0 });
-  const dotPosition = useRef({ x: 0, y: 0 });
-  const borderDotPosition = useRef({ x: 0, y: 0 });
-  const [renderPos, setRenderPos] = useState({
-    dot: { x: 0, y: 0 },
-    border: { x: 0, y: 0 },
-  });
-  const [isHovering, setIsHovering] = useState(false);
-  const DOT_SMOOTHNESS = 0.2;
-  const BORDER_DOT_SMOOTHNESS = 0.1;
+  const [isDesktop, setIsDesktop] = useState(
+    typeof window !== 'undefined' ? window.innerWidth >= 1024 : false
+  );
 
   useEffect(() => {
-    const handleMouseMove = (e) => {
-      mousePosition.current = { x: e.clientX, y: e.clientY };
-    };
+    const check = () => setIsDesktop(window.innerWidth >= 1024)
+    window.addEventListener('resize', check)
+    return () => window.removeEventListener('resize', check)
+  }, [])
 
-    const handleMouseEnter = () => setIsHovering(true);
-    const handleMouseLeave = () => setIsHovering(false);
+  const mousePos = useRef({ x: 0, y: 0 })
+  const dot = useRef({ x: 0, y: 0 })
+  const ring = useRef({ x: 0, y: 0 })
+  const dotEl = useRef(null)
+  const ringEl = useRef(null)
+  const rafId = useRef(null)
 
-    window.addEventListener('mousemove', handleMouseMove);
+  useEffect(() => {
+    if (!isDesktop) return
 
-    const interactiveElements = document.querySelectorAll(
-      'a, button, img, input, textarea, select'
-    );
-    interactiveElements.forEach((element) => {
-      element.addEventListener('mouseenter', handleMouseEnter);
-      element.addEventListener('mouseleave', handleMouseLeave);
-    });
+    const onMouse = (e) => {
+      mousePos.current.x = e.clientX
+      mousePos.current.y = e.clientY
+    }
 
-    const animate = () => {
-      const lerp = (start, end, factor) => {
-        return start + (end - start) * factor;
-      };
+    const enter = () => {
+      if (ringEl.current) {
+        ringEl.current.style.width = '44px'
+        ringEl.current.style.height = '44px'
+      }
+    }
 
-      dotPosition.current.x = lerp(
-        dotPosition.current.x,
-        mousePosition.current.x,
-        DOT_SMOOTHNESS
-      );
-      dotPosition.current.y = lerp(
-        dotPosition.current.y,
-        mousePosition.current.y,
-        DOT_SMOOTHNESS
-      );
+    const leave = () => {
+      if (ringEl.current) {
+        ringEl.current.style.width = '28px'
+        ringEl.current.style.height = '28px'
+      }
+    }
 
-      borderDotPosition.current.x = lerp(
-        borderDotPosition.current.x,
-        mousePosition.current.x,
-        BORDER_DOT_SMOOTHNESS
-      );
-      borderDotPosition.current.y = lerp(
-        borderDotPosition.current.y,
-        mousePosition.current.y,
-        BORDER_DOT_SMOOTHNESS
-      );
+    window.addEventListener('mousemove', onMouse)
 
-      setRenderPos({
-        dot: { x: dotPosition.current.x, y: dotPosition.current.y },
-        border: {
-          x: borderDotPosition.current.x,
-          y: borderDotPosition.current.y,
-        },
-      });
+    const els = document.querySelectorAll('a, button, img, input, textarea, select')
+    els.forEach((el) => {
+      el.addEventListener('mouseenter', enter)
+      el.addEventListener('mouseleave', leave)
+    })
 
-      requestAnimationFrame(animate);
-    };
+    const DOT_SMOOTHNESS = 0.2
+    const RING_SMOOTHNESS = 0.1
 
-    const animationId = requestAnimationFrame(animate);
+    const tick = () => {
+      dot.current.x += (mousePos.current.x - dot.current.x) * DOT_SMOOTHNESS
+      dot.current.y += (mousePos.current.y - dot.current.y) * DOT_SMOOTHNESS
+      ring.current.x += (mousePos.current.x - ring.current.x) * RING_SMOOTHNESS
+      ring.current.y += (mousePos.current.y - ring.current.y) * RING_SMOOTHNESS
+
+      if (dotEl.current) {
+        dotEl.current.style.left = `${dot.current.x}px`
+        dotEl.current.style.top = `${dot.current.y}px`
+      }
+      if (ringEl.current) {
+        ringEl.current.style.left = `${ring.current.x}px`
+        ringEl.current.style.top = `${ring.current.y}px`
+      }
+
+      rafId.current = requestAnimationFrame(tick)
+    }
+
+    rafId.current = requestAnimationFrame(tick)
 
     return () => {
-      window.removeEventListener('mousemove', handleMouseMove);
-      interactiveElements.forEach((element) => {
-        element.removeEventListener('mouseenter', handleMouseEnter);
-        element.removeEventListener('mouseleave', handleMouseLeave);
-      });
-      cancelAnimationFrame(animationId);
-    };
-  }, []);
+      window.removeEventListener('mousemove', onMouse)
+      els.forEach((el) => {
+        el.removeEventListener('mouseenter', enter)
+        el.removeEventListener('mouseleave', leave)
+      })
+      cancelAnimationFrame(rafId.current)
+    }
+  }, [isDesktop])
+
+  if (!isDesktop) return null
 
   return (
     <div className="pointer-events-none fixed inset-0 z-[60]">
       <div
+        ref={dotEl}
         className="absolute rounded-full bg-black"
-        style={{
-          width: '8px',
-          height: '8px',
-          transform: 'translate(-50%, -50%)',
-          left: `${renderPos.dot.x}px`,
-          top: `${renderPos.dot.y}px`,
-        }}
+        style={{ width: 8, height: 8, transform: 'translate(-50%,-50%)' }}
       />
-
       <div
+        ref={ringEl}
         className="absolute rounded-full border border-black"
         style={{
-          width: isHovering ? '44px' : '28px',
-          height: isHovering ? '44px' : '28px',
-          transform: 'translate(-50%, -50%)',
-          left: `${renderPos.border.x}px`,
-          top: `${renderPos.border.y}px`,
+          width: 28,
+          height: 28,
+          transform: 'translate(-50%,-50%)',
           transition: 'width 0.3s, height 0.3s',
         }}
       />
     </div>
-  );
+  )
 }

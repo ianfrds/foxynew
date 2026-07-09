@@ -25,7 +25,7 @@ export default function ValueProps() {
               <div className="shine" />
               <div className="background">
                 <div className="tiles">
-                  {[1,2,3,4,5,6,7,8,9,10].map((i) => (
+                  {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((i) => (
                     <div key={i} className={`tile tile-${i}`} />
                   ))}
                 </div>

@@ -25,7 +25,7 @@ export default function Hero() {
   const words = ['rooms', 'walls', 'space', 'studio', 'gallery']
 
   return (
-    <section id="hero" className="relative min-h-screen pt-16 pb-12 bg-brand-cream overflow-hidden flex flex-col justify-between">
+    <section id="hero" className="relative min-h-screen pt-16 pb-12 overflow-hidden flex flex-col justify-between">
       {/* Interactive dot grid */}
       <InteractiveDots />
 

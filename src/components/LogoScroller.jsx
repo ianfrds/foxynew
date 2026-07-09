@@ -2,7 +2,7 @@ import { LogoLoop } from './ui/LogoLoop/LogoLoop'
 
 export default function LogoScroller() {
   return (
-    <section className="py-8 md:py-12 bg-brand-cream logo-scroller">
+    <section className="py-8 md:py-12 logo-scroller">
       <div className="mx-auto px-4 sm:px-6 lg:px-8 overflow-hidden">
         {/* Mobile */}
         <div className="sm:hidden">
