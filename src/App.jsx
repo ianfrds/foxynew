@@ -8,7 +8,6 @@ import CaraPesanPage from './pages/CaraPesanPage'
 import TestimoniPage from './pages/TestimoniPage'
 import ProductDetail from './components/ProductDetail'
 import LoadingScreen from './components/LoadingScreen'
-import GradualBlur from './components/ui/GradualBlur/GradualBlur'
 import SmoothFollower from './components/SmoothFollower'
 import FlyToCart from './components/FlyToCart'
 
@@ -64,13 +63,6 @@ export default function App() {
         <Route path="/testimoni" element={<TestimoniPage />} />
         <Route path="/product/:productId" element={<ProductDetail />} />
       </Routes>
-
-      <GradualBlur
-        target="page"
-        position="bottom"
-        height="7rem"
-        opacity={atBottom ? 0 : 1}
-      />
 
       <button
         onClick={scrollToTop}
