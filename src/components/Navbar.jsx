@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react'
-import { Link, useLocation } from 'react-router-dom'
+import { useState } from 'react'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { HiOutlineShoppingCart } from 'react-icons/hi'
 import { NAV_LINKS } from '../constants'
 import useCartStore from '../store/cartStore'
@@ -9,12 +9,7 @@ export default function Navbar({ onCartOpen }) {
   const [mobileOpen, setMobileOpen] = useState(false)
   const itemCount = useCartStore((s) => s.getItemCount())
   const location = useLocation()
-
-  const scrollTo = (id) => {
-    setMobileOpen(false)
-    const el = document.getElementById(id)
-    if (el) el.scrollIntoView({ behavior: 'smooth' })
-  }
+  const navigate = useNavigate()
 
   const handleLogoClick = () => {
     if (location.pathname === '/') {
@@ -22,28 +17,24 @@ export default function Navbar({ onCartOpen }) {
     }
   }
 
-  const [activeSection, setActiveSection] = useState('')
+  const isActive = (path) => {
+    if (path === '/') return location.pathname === '/'
+    return location.pathname.startsWith(path)
+  }
 
-  useEffect(() => {
-    if (location.pathname !== '/') return
-    const ids = NAV_LINKS.map((l) => l.id)
-    const els = ids.map((id) => document.getElementById(id)).filter(Boolean)
-    if (els.length === 0) return
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const visible = entries
-          .filter((e) => e.isIntersecting)
-          .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top)
-        if (visible.length > 0) {
-          setActiveSection(visible[0].target.id)
-        }
-      },
-      { rootMargin: '-80px 0px -60% 0px', threshold: 0 }
-    )
-    els.forEach((el) => observer.observe(el))
-    return () => observer.disconnect()
-  }, [location.pathname])
+  const handleMulaiCetak = () => {
+    setMobileOpen(false)
+    if (location.pathname === '/') {
+      const el = document.getElementById('produk')
+      if (el) el.scrollIntoView({ behavior: 'smooth' })
+    } else {
+      navigate('/')
+      setTimeout(() => {
+        const el = document.getElementById('produk')
+        if (el) el.scrollIntoView({ behavior: 'smooth' })
+      }, 100)
+    }
+  }
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-md px-6 md:px-12 lg:px-24 xl:px-40 py-4 flex items-center justify-between">
@@ -54,17 +45,18 @@ export default function Navbar({ onCartOpen }) {
 
       <div className="hidden md:flex items-center bg-zinc-50 border border-zinc-200 rounded-full px-1 py-1 gap-2">
         {NAV_LINKS.map((link) => (
-          <button
-            key={link.id}
-            onClick={() => scrollTo(link.id)}
-            className={`px-4 py-1.5 rounded-full text-sm transition-colors ${
-              activeSection === link.id
+          <Link
+            key={link.path}
+            to={link.path}
+            onClick={() => setMobileOpen(false)}
+            className={`px-4 py-1.5 rounded-full text-sm transition-colors no-underline ${
+              isActive(link.path)
                 ? 'bg-white border border-zinc-200 font-medium text-zinc-800'
                 : 'text-zinc-500 hover:text-zinc-700'
             }`}
           >
             {link.label}
-          </button>
+          </Link>
         ))}
       </div>
 
@@ -82,7 +74,7 @@ export default function Navbar({ onCartOpen }) {
           )}
         </button>
         <button
-          onClick={() => scrollTo('produk')}
+          onClick={handleMulaiCetak}
           className="flex items-center gap-2.5 bg-gradient-to-r from-zinc-950 to-zinc-500 text-zinc-50 hover:text-zinc-200 text-sm font-medium pl-5 pr-2 py-2 rounded-full cursor-pointer border-0"
         >
           Mulai Cetak
@@ -120,20 +112,21 @@ export default function Navbar({ onCartOpen }) {
 
       <div className={`${mobileOpen ? 'flex' : 'hidden'} absolute top-full left-0 w-full bg-white border-t border-zinc-200 flex-col p-5 gap-1 md:hidden z-50`}>
         {NAV_LINKS.map((link) => (
-          <button
-            key={link.id}
-            onClick={() => scrollTo(link.id)}
-            className={`block px-4 py-3.5 rounded-lg text-sm w-full text-left ${
-              activeSection === link.id
+          <Link
+            key={link.path}
+            to={link.path}
+            onClick={() => setMobileOpen(false)}
+            className={`block px-4 py-3.5 rounded-lg text-sm w-full text-left no-underline ${
+              isActive(link.path)
                 ? 'bg-zinc-100 font-medium text-zinc-800'
                 : 'text-zinc-500 hover:bg-zinc-50'
             }`}
           >
             {link.label}
-          </button>
+          </Link>
         ))}
         <button
-          onClick={() => scrollTo('produk')}
+          onClick={handleMulaiCetak}
           className="flex items-center justify-center gap-2.5 bg-gradient-to-r from-zinc-950 to-zinc-500 text-zinc-50 text-sm font-medium px-5 py-3.5 rounded-full cursor-pointer border-0 mt-3 w-fit"
         >
           Mulai Cetak

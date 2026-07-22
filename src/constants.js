@@ -81,9 +81,9 @@ export const PRODUCTS = [
 ]
 
 export const WORKFLOW_STEPS = [
-  { step: 1, title: 'Unggah Foto', desc: 'Upload foto langsung dari HP atau komputer. Drag & drop, praktis!' },
-  { step: 2, title: 'Atur Ukuran & Bingkai', desc: 'Sesuaikan ukuran, crop, dan atur posisi foto sesuai keinginan.' },
-  { step: 3, title: 'Pesan & Bayar', desc: 'Masukkan alamat, pilih pembayaran, dan pesananmu akan kami proses.' },
+  { step: 1, title: 'Pilih Produk', desc: 'Pilih produk yang kamu suka' },
+  { step: 2, title: 'Pesan', desc: 'Masukkan ke dalam keranjang atau langsung pesan' },
+  { step: 3, title: 'Produksi & Kirim', desc: 'Jika produk custom kamu akan segera dihubungi admin dan segera dilakukan produksi hingga pengiriman' },
 ]
 
 export const VALUE_PROPS = [
@@ -113,9 +113,9 @@ export const PAYMENT_METHODS = [
 ]
 
 export const NAV_LINKS = [
-  { id: 'produk', label: 'Produk' },
-  { id: 'cara-pesan', label: 'Cara Pesan' },
-  { id: 'testimoni', label: 'Testimoni' },
+  { label: 'Beranda', path: '/' },
+  { label: 'Semua Produk', path: '/produk' },
+  { label: 'Tentang Kami', path: '/tentang-kami' },
 ]
 
 export const SHIPPING_COST = 8000

@@ -2,6 +2,8 @@ import { useState, useEffect, useRef, useCallback } from 'react'
 import { Routes, Route, useLocation } from 'react-router-dom'
 import { HiArrowUp } from 'react-icons/hi'
 import HomePage from './pages/HomePage'
+import ProdukPage from './pages/ProdukPage'
+import TentangKamiPage from './pages/TentangKamiPage'
 import ProductDetail from './components/ProductDetail'
 import LoadingScreen from './components/LoadingScreen'
 import GradualBlur from './components/ui/GradualBlur/GradualBlur'
@@ -53,6 +55,8 @@ export default function App() {
       {transitioning && <LoadingScreen overlay />}
       <Routes>
         <Route path="/" element={<HomePage />} />
+        <Route path="/produk" element={<ProdukPage />} />
+        <Route path="/tentang-kami" element={<TentangKamiPage />} />
         <Route path="/product/:productId" element={<ProductDetail />} />
       </Routes>
 
