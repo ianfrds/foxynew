@@ -103,7 +103,7 @@ export default function ProdukPage() {
                           Rp{product.price.toLocaleString('id-ID')}
                         </span>
                         <button
-                          onClick={(e) => { e.preventDefault(); e.stopPropagation(); addItem(product, 1) }}
+                           onClick={(e) => { e.preventDefault(); e.stopPropagation(); addItem(product, 1, e.currentTarget.getBoundingClientRect()) }}
                           className="w-full sm:w-auto flex items-center justify-center gap-1.5 px-3.5 py-2 bg-primary text-white text-xs font-semibold rounded-input hover:bg-primary-dark transition-all active:scale-[0.97] tap-target"
                         >
                           <HiShoppingCart className="w-4 h-4" />

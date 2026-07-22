@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { HiOutlineShoppingCart } from 'react-icons/hi'
 import { NAV_LINKS } from '../constants'
@@ -7,9 +7,21 @@ import logo from '../assets/2.png'
 
 export default function Navbar({ onCartOpen }) {
   const [mobileOpen, setMobileOpen] = useState(false)
+  const [badgeAnim, setBadgeAnim] = useState(false)
   const itemCount = useCartStore((s) => s.getItemCount())
+  const prevCount = useRef(itemCount)
   const location = useLocation()
   const navigate = useNavigate()
+
+  useEffect(() => {
+    if (itemCount > prevCount.current) {
+      setBadgeAnim(true)
+      const t = setTimeout(() => setBadgeAnim(false), 400)
+      prevCount.current = itemCount
+      return () => clearTimeout(t)
+    }
+    prevCount.current = itemCount
+  }, [itemCount])
 
   const handleLogoClick = () => {
     if (location.pathname === '/') {
@@ -68,7 +80,7 @@ export default function Navbar({ onCartOpen }) {
         >
           <HiOutlineShoppingCart className="w-5 h-5" />
           {itemCount > 0 && (
-            <span className="absolute -top-0.5 -right-0.5 bg-primary text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
+            <span className={`absolute -top-0.5 -right-0.5 bg-primary text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center ${badgeAnim ? 'animate-badge-pop' : ''}`}>
               {itemCount > 9 ? '9+' : itemCount}
             </span>
           )}
@@ -94,7 +106,7 @@ export default function Navbar({ onCartOpen }) {
         >
           <HiOutlineShoppingCart className="w-5 h-5" />
           {itemCount > 0 && (
-            <span className="absolute -top-0.5 -right-0.5 bg-primary text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
+            <span className={`absolute -top-0.5 -right-0.5 bg-primary text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center ${badgeAnim ? 'animate-badge-pop' : ''}`}>
               {itemCount > 9 ? '9+' : itemCount}
             </span>
           )}

@@ -6,8 +6,9 @@ const useCartStore = create((set, get) => ({
   promoCode: '',
   promoDiscount: 0,
   shippingCost: 0,
+  flySource: null,
 
-  addItem: (product, quantity = 1) => {
+  addItem: (product, quantity = 1, sourceRect = null) => {
     set((state) => {
       const existing = state.items.find((item) => item.productId === product.id)
       if (existing) {
@@ -17,6 +18,7 @@ const useCartStore = create((set, get) => ({
               ? { ...item, quantity: item.quantity + quantity }
               : item
           ),
+          flySource: sourceRect,
         }
       }
       return {
@@ -31,9 +33,12 @@ const useCartStore = create((set, get) => ({
             image: product.image,
           },
         ],
+        flySource: sourceRect,
       }
     })
   },
+
+  clearFlySource: () => set({ flySource: null }),
 
   removeItem: (itemId) => {
     set((state) => ({

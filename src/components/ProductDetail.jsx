@@ -38,8 +38,8 @@ export default function ProductDetail() {
 
   const related = PRODUCTS.filter((p) => p.category === product.category && p.id !== product.id).slice(0, 4)
 
-  const handleAddToCart = () => {
-    addItem(product, qty)
+  const handleAddToCart = (e) => {
+    addItem(product, qty, e.currentTarget.getBoundingClientRect())
     setAdded(true)
     setTimeout(() => setAdded(false), 2000)
   }

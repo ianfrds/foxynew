@@ -4,10 +4,13 @@ import { HiArrowUp } from 'react-icons/hi'
 import HomePage from './pages/HomePage'
 import ProdukPage from './pages/ProdukPage'
 import TentangKamiPage from './pages/TentangKamiPage'
+import CaraPesanPage from './pages/CaraPesanPage'
+import TestimoniPage from './pages/TestimoniPage'
 import ProductDetail from './components/ProductDetail'
 import LoadingScreen from './components/LoadingScreen'
 import GradualBlur from './components/ui/GradualBlur/GradualBlur'
 import SmoothFollower from './components/SmoothFollower'
+import FlyToCart from './components/FlyToCart'
 
 export default function App() {
   const [firstLoad, setFirstLoad] = useState(true)
@@ -57,6 +60,8 @@ export default function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/produk" element={<ProdukPage />} />
         <Route path="/tentang-kami" element={<TentangKamiPage />} />
+        <Route path="/cara-pesan" element={<CaraPesanPage />} />
+        <Route path="/testimoni" element={<TestimoniPage />} />
         <Route path="/product/:productId" element={<ProductDetail />} />
       </Routes>
 
@@ -77,6 +82,7 @@ export default function App() {
         <HiArrowUp className="w-5 h-5" />
       </button>
 
+      <FlyToCart />
       <SmoothFollower />
     </>
   )

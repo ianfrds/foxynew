@@ -114,7 +114,7 @@ export const PAYMENT_METHODS = [
 
 export const NAV_LINKS = [
   { label: 'Beranda', path: '/' },
-  { label: 'Semua Produk', path: '/produk' },
+  { label: 'Produk', path: '/produk' },
   { label: 'Tentang Kami', path: '/tentang-kami' },
 ]
 

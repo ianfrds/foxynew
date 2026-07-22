@@ -84,7 +84,7 @@ export default function SmoothFollower() {
   if (!isDesktop) return null
 
   return (
-    <div className="pointer-events-none fixed inset-0 z-[60]" style={{ mixBlendMode: 'difference' }}>
+    <div className="pointer-events-none fixed inset-0 z-[90]" style={{ mixBlendMode: 'difference' }}>
       <div
         ref={dotEl}
         className="absolute rounded-full bg-white"
