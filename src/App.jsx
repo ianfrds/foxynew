@@ -40,11 +40,13 @@ export default function App() {
   }, [])
 
   useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' })
     if (prevPath.current !== location.pathname) {
       setTransitioning(true)
       const timer = setTimeout(() => {
         setTransitioning(false)
         prevPath.current = location.pathname
+        window.scrollTo({ top: 0, left: 0, behavior: 'instant' })
       }, 500)
       return () => clearTimeout(timer)
     }

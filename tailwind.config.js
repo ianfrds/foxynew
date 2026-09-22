@@ -18,6 +18,7 @@ export default {
         sans: ['Manrope', 'system-ui', 'sans-serif'],
         heading: ['Manrope', 'system-ui', 'sans-serif'],
         body: ['Inter', 'system-ui', 'sans-serif'],
+        handwriting: ['Caveat', 'cursive'],
       },
       borderRadius: {
         'input': '8px',

@@ -6,6 +6,7 @@ import KategoriSection from '../components/KategoriSection'
 import AestheticSection from '../components/AestheticSection'
 import ProductCatalog from '../components/ProductCatalog'
 import Workflow from '../components/Workflow'
+import PolaroidPreviewSection from '../components/PolaroidPreviewSection'
 import ValueProps from '../components/ValueProps'
 import Statistics from '../components/Statistics'
 import Testimonials from '../components/Testimonials'
@@ -25,6 +26,7 @@ export default function HomePage() {
       <KategoriSection />
       <ProductCatalog />
       <Workflow />
+      <PolaroidPreviewSection />
       <ValueProps />
       <AestheticSection />
       <Testimonials />

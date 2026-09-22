@@ -29,6 +29,13 @@ export default function Navbar({ onCartOpen }) {
     }
   }
 
+  const handleNavLinkClick = (path) => {
+    setMobileOpen(false)
+    if (location.pathname === path) {
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+    }
+  }
+
   const isActive = (path) => {
     if (path === '/') return location.pathname === '/'
     return location.pathname.startsWith(path)
@@ -60,7 +67,7 @@ export default function Navbar({ onCartOpen }) {
           <Link
             key={link.path}
             to={link.path}
-            onClick={() => setMobileOpen(false)}
+            onClick={() => handleNavLinkClick(link.path)}
             className={`px-4 py-1.5 rounded-full text-sm transition-colors no-underline ${
               isActive(link.path)
                 ? 'bg-white border border-zinc-200 font-medium text-zinc-800'
@@ -127,7 +134,7 @@ export default function Navbar({ onCartOpen }) {
           <Link
             key={link.path}
             to={link.path}
-            onClick={() => setMobileOpen(false)}
+            onClick={() => handleNavLinkClick(link.path)}
             className={`block px-4 py-3.5 rounded-lg text-sm w-full text-left no-underline ${
               isActive(link.path)
                 ? 'bg-zinc-100 font-medium text-zinc-800'
